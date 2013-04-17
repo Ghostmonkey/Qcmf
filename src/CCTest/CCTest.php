@@ -22,7 +22,7 @@ class CCTest implements IController {
     
     $qcmf = CQcmf::Instance();
     
-    $url = 'developer/links';
+    $url = 'test/links';
     $current      = $qcmf->request->CreateUrl($url);
 
     $qcmf->request->cleanUrl = false;
