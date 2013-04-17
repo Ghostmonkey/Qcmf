@@ -10,10 +10,11 @@ class CCIndex implements IController {
 	public function Index() {   
 		global $qcmf;
 		$qcmf->data['title'] = "The Index Controller";
+		$qcmf->data['main'] = "This is the index controller";
 	}
 	
-	public function test(){
-		
+	public function someMethod(){
+		$qcmf->data['main'] .= "You tried the method someMethod";
 	}
 }
 ?>
