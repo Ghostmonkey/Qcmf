@@ -9,19 +9,24 @@
  * Print debuginformation from the framework.
  */
 function get_debug() {
-  $cqcmf = CQcmf::Instance();
-  $html = "<h2>Debuginformation</h2><hr><p>The content of the config array:</p><pre>" . htmlentities(print_r($cqcmf->config, true)) . "</pre>";
-  $html .= "<hr><p>The content of the data array:</p><pre>" . htmlentities(print_r($cqcmf->data, true)) . "</pre>";
-  $html .= "<hr><p>The content of the request array:</p><pre>" . htmlentities(print_r($cqcmf->request, true)) . "</pre>";
-  return $html;
+	$qcmf = CQcmf::Instance();
+	$html = null;
+	if (isset($qcmf->config['debug']['display-qcmf']) && $qcmf->config['debug']['display-qcmf']) {
+		$html .= "<hr><h3>Debuginformation</h3><p>The content of CQcmf: </p><pre>" . htmlent(print_r($qcmf, true)) . "</pre>";
+	}
+	if (isset($qcmf->config['debug']['db-num-queries']) && $qcmf->config['debug']['db-num-queries'] && isset($qcmf -> db)) {
+		$html .= "<p>Database made " . $qcmf -> db -> GetNumQueries() . " queries.</p>";
+	}
+	if (isset($qcmf->config['debug']['db-queries']) && $qcmf->config['debug']['db-queries'] && isset($qcmf -> db)) {
+		$html .= "<p>Database queries: </p><pre>" . implode('<br/><br/>', $qcmf -> db -> GetQueries()) . "</pre>";
+	}
+	return $html;
 }
-
-
 /**
  * Prepend the base_url.
  */
 function base_url($url) {
-  return $qcmf->request->base_url . trim($url, '/');
+	return $qcmf->request->base_url . trim($url, '/');
 }
 
 
@@ -29,6 +34,6 @@ function base_url($url) {
  * Return the current url.
  */
 function current_url() {
-  return $qcmf->request->current_url;
+	return $qcmf->request->current_url;
 }
 ?>

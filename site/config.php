@@ -11,6 +11,13 @@ error_reporting(-1);
 ini_set('display_errors', 1);
 
 /**
+ * Set what to show as debug or developer information in the get_debug() theme helper.
+ */
+$qcmf->config['debug']['display-qcmf'] = true;
+$qcmf->config['debug']['db-num-queries'] = true;
+$qcmf->config['debug']['db-queries'] = true;
+
+/**
  * What type of urls should be used?
  * 
  * default      = 0      => index.php/controller/method/arg1/arg2/arg3
@@ -18,6 +25,11 @@ ini_set('display_errors', 1);
  * querystring  = 2      => index.php?q=controller/method/arg1/arg2/arg3
  */
 $qcmf->config['url_type'] = 1;
+
+/**
+ * Set up database
+ */
+$qcmf->config['database'][0]['dsn'] = 'sqlite:' . QCMF_SITE_PATH . '/data/.ht.sqlite';
 
 /**
  * Set a base_url to use another than the default calculated
@@ -57,6 +69,7 @@ $qcmf->config['language'] = 'en';
 $qcmf->config['controllers'] = array(
   'index'     => array('enabled' => true,'class' => 'CCIndex'),
   'test' => array('enabled' => true,'class' => 'CCTest'),
+  'guestbook' => array('enabled' => true,'class' => 'CCGuestbook'),
 );
 
 /**
