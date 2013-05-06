@@ -3,7 +3,6 @@
  * Helpers for theming, available for all themes in their template files and functions.php.
  * This file is included right before the themes own functions.php
  */
- 
 
 /**
  * Print debuginformation from the framework.
@@ -22,6 +21,14 @@ function get_debug() {
 	}
 	return $html;
 }
+
+/**
+ * Render views
+ */
+function render_views(){
+	return CQcmf::Instance()->views->Render();
+}
+
 /**
  * Prepend the base_url.
  */
@@ -29,6 +36,20 @@ function base_url($url) {
 	return $qcmf->request->base_url . trim($url, '/');
 }
 
+/**
+ * Create internal resource url
+ */
+function create_url($url=null) {
+	return CQcmf::instance()->request->CreateUrl($url);
+}
+
+/**
+ * Prepende the theme directory url
+ */
+function theme_url($url) {
+	$qcmf = CQcmf::instance();
+	return "{$qcmf->request->base_url}themes/{$qcmf->config['theme']['name']}/{$url}";
+}
 
 /**
  * Return the current url.

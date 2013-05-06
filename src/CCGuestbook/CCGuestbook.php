@@ -51,7 +51,7 @@ class CCGuestbook extends CObject implements IController, IHasSQL {
 	 * Save a new entry to database.
 	 */
 	private function SaveNewToDatabase($entry) {
-		$this->db->ExecuteQuery(self::SQL('insert into guestbook', array($entry)));
+		$this->db->ExecuteQuery(self::SQL('insert into guestbook', $entry));
 		if($this->db->rowCount() != 1) {
 			die('Failed to insert new guestbook item into database.');
 		}
@@ -69,7 +69,7 @@ class CCGuestbook extends CObject implements IController, IHasSQL {
 	 */
 	private function CreateTableInDatabase() {
 		try {
-			$this->db->executeQuery("CREATE TABLE IF NOT EXISTS Guestbook (id INTEGER PRIMARY KEY, entry TEXT, created DATETIME default (datetime('now')));");
+			$this->db->executeQuery(self::SQL('create table gusetbook'));
 		} catch(Exception$e) {
 			die("Failed to open database: " . $this->config['database'][0]['dsn'] . "</br>" . $e);
 		}
@@ -91,6 +91,7 @@ class CCGuestbook extends CObject implements IController, IHasSQL {
 	* Implementing interface IController. All controllers must have an index action.
 	*/ 
 	public function Index() {
+		/*
 		$formAction = $this->request->CreateUrl('guestbook/handle');
 		$this->pageForm = "
 			<form action='{$formAction}' method='post'>
@@ -113,6 +114,14 @@ class CCGuestbook extends CObject implements IController, IHasSQL {
     	foreach($entries as $val) {
       		$this->data['main'] .= "<div style='background-color:#f6f6f6;border:1px solid #ccc;margin-bottom:1em;padding:1em;'><p>At: {$val['created']}</p><p>" . htmlent($val['entry']) . "</p></div>\n";
     	}
+		*/
+
+		$this->views->SetTitle($this->pageTitle);
+		$this->views->AddInclude(__DIR__ . '/index.tpl.php', array(
+			'entries' => $this->ReadAllFromDatabase(),
+			'formAction' => $this->request->CreateUrl('guestbook/handle')
+			));
+		 
 	}
 }
 ?>
