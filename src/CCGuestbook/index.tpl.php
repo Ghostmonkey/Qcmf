@@ -1,6 +1,5 @@
 <h1>Guestbook demonstration</h1>
 <p>Showing off how to implement a guestbook in Qcmf. Now saving to db.</p>
-<?=print_r($_POST)?>
 <form action="<?=$formAction?>" method='post'>
   <p>
     <label>Message: <br/>

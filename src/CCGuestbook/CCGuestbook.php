@@ -51,7 +51,8 @@ class CCGuestbook extends CObject implements IController, IHasSQL {
 	 * Save a new entry to database.
 	 */
 	private function SaveNewToDatabase($entry) {
-		$this->db->ExecuteQuery(self::SQL('insert into guestbook', $entry));
+		$this->db->ExecuteQuery(self::SQL('insert into guestbook', array('dasdasdas', $entry)));
+		$this->session->AddMessage('info', 'Added message to guestbook');
 		if($this->db->rowCount() != 1) {
 			die('Failed to insert new guestbook item into database.');
 		}
@@ -62,6 +63,7 @@ class CCGuestbook extends CObject implements IController, IHasSQL {
 	 */
 	private function DeleteAllFromDatabase() {
 		$this->db->ExecuteQuery(self::SQL('delete from guestbook'));
+		$this->session->AddMessage('info', 'Deleted all from guestbook');
 	}
 
 	/**
@@ -69,7 +71,8 @@ class CCGuestbook extends CObject implements IController, IHasSQL {
 	 */
 	private function CreateTableInDatabase() {
 		try {
-			$this->db->executeQuery(self::SQL('create table gusetbook'));
+			$this->db->executeQuery(self::SQL('create table guestbook'));
+			$this->session->AddMessage('info', 'Created table if missing');
 		} catch(Exception$e) {
 			die("Failed to open database: " . $this->config['database'][0]['dsn'] . "</br>" . $e);
 		}
@@ -91,30 +94,6 @@ class CCGuestbook extends CObject implements IController, IHasSQL {
 	* Implementing interface IController. All controllers must have an index action.
 	*/ 
 	public function Index() {
-		/*
-		$formAction = $this->request->CreateUrl('guestbook/handle');
-		$this->pageForm = "
-			<form action='{$formAction}' method='post'>
-			<p>
-			<label>Message:
-			<br/>
-			<textarea name='newEntry'></textarea>			</label>
-			</p>
-			<p>
-			<input type='submit' name='doAdd' value='Add message' />
-			<input type='submit' name='doClear' value='Clear all messages' />
-			<input type='submit' name='doCreate' value='Create Table' />
-			</p>
-			</form>
-			";
-		$this->data['title'] = $this->pageTitle;
-		$this->data['main']  = $this->pageHeader . $this->pageForm . print($_POST);
-	
-		$entries = $this->ReadAllFromDatabase();
-    	foreach($entries as $val) {
-      		$this->data['main'] .= "<div style='background-color:#f6f6f6;border:1px solid #ccc;margin-bottom:1em;padding:1em;'><p>At: {$val['created']}</p><p>" . htmlent($val['entry']) . "</p></div>\n";
-    	}
-		*/
 
 		$this->views->SetTitle($this->pageTitle);
 		$this->views->AddInclude(__DIR__ . '/index.tpl.php', array(

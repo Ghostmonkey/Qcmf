@@ -16,7 +16,7 @@ ini_set('display_errors', 1);
 $qcmf->config['debug']['display-qcmf'] = true;
 $qcmf->config['debug']['db-num-queries'] = true;
 $qcmf->config['debug']['db-queries'] = true;
-
+$qcmf->config['debug']['session'] = true;
 /**
  * What type of urls should be used?
  * 
@@ -40,6 +40,7 @@ $qcmf->config['base_url'] = null;
  * Define session name
  */
 $qcmf->config['session_name'] = preg_replace('/[:\.\/-_]/', '', $_SERVER["SERVER_NAME"]);
+$qcmf->config['session_key'] = 'qcfm';
 
 /**
  * Define server timezone
@@ -79,3 +80,5 @@ $qcmf->config['theme'] = array(
   // The name of the theme in the theme directory
   'name'    => 'core', 
 );
+
+

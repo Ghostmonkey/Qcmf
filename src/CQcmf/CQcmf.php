@@ -6,12 +6,13 @@
  */
 class CQcmf implements ISingleton {
 
-  private static $instance = null;
-  public $config = null;
-  public $request = null;
-  public $data = null;
-  public $db = null;
-  public $views = null;
+  	private static $instance = null;
+  	public $config = null;
+  	public $request = null;
+  	public $data = null;
+  	public $db = null;
+	public $views = null;
+	public $session;
 
 	/**
 	 * Constructor
@@ -25,6 +26,8 @@ class CQcmf implements ISingleton {
 		//Start named session
 		session_name($this->config['session_name']);
 		session_start();
+		$this->session = new CSession($this->config['session_key']);
+      	$this->session->PopulateFromSession();
 		
 		if(isset($this->config['database'][0]['dsn'])) {
 			$this->db = new CMDatabase($this->config['database'][0]['dsn']);
@@ -97,6 +100,9 @@ class CQcmf implements ISingleton {
 		* ThemeEngineRender, renders the reply of the request to HTML or whatever.
 		*/
 		public function ThemeEngineRender() {
+			
+			$this->session->StoreInSession();
+			
 			// Get the paths and settings for the theme
 			$themeName   = $this->config['theme']['name'];
 			$themePath   = QCMF_INSTALL_PATH . "/themes/{$themeName}";
