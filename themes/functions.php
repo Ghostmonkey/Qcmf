@@ -13,10 +13,10 @@ function get_debug() {
 	if (isset($qcmf->config['debug']['display-qcmf'])) {
 		$html .= "<hr><h3>Debuginformation</h3><p>The content of CQcmf: </p><pre>" . htmlent(print_r($qcmf, true)) . "</pre>";
 	}
-	if (isset($qcmf->config['debug']['db-num-queries']) && $qcmf->config['debug']['db-num-queries'] && isset($qcmf -> db)) {
+	if (isset($qcmf->config['debug']['db-num-queries']) && $qcmf->config['debug']['db-num-queries'] && isset($qcmf->db)) {
 		$html .= "<p>Database made " . $qcmf -> db -> GetNumQueries() . " queries.</p>";
 	}
-	if (isset($qcmf->config['debug']['db-queries']) && $qcmf->config['debug']['db-queries'] && isset($qcmf -> db)) {
+	if (isset($qcmf->config['debug']['db-queries']) && $qcmf->config['debug']['db-queries'] && isset($qcmf->db)) {
 		$html .= "<p>Database queries: </p><pre>" . implode('<br/><br/>', $qcmf -> db -> GetQueries()) . "</pre>";
 	}
 	return $html;

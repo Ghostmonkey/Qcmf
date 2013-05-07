@@ -16,7 +16,7 @@ body{
    padding: 1em;
 }
 
-.info {
+.info, .success {
 	background-color: #83F0C3;
 	border: 1px solid #A0F06C;
 }
