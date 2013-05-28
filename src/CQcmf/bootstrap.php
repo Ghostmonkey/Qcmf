@@ -24,7 +24,7 @@ function htmlent($str, $flags = ENT_COMPAT) {
 }
 
 function exception_handler($exception) {
-	echo "Qcmf: uncaught exception: <p>" . $exception->getMEssage() . "</p><pre>" . $exception->getTraceAsString() . "</pre>"; 
+	echo "Qcmf: uncaught exception: <p>" . $exception->getMessage() . "</p><pre>" . $exception->getTraceAsString() . "</pre>"; 
 }
 
 spl_autoload_register('autoload');

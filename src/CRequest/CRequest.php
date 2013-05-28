@@ -22,12 +22,13 @@ class CRequest {
    * querystring  = 2      => index.php?q=controller/method/arg1/arg2/arg3
    *
    * @param boolean $urlType integer 
-   */ public function __construct($urlType=0) {
+   */ 
+   public function __construct($urlType=0) {
 		$this->cleanUrl       = $urlType= 1 ? true : false;
 		$this->querystringUrl = $urlType= 2 ? true : false;
 	}
 
-	public function CreateUrl($url=null, $method=null) {
+	public function CreateUrl($url=null, $method=null, $arguments=null) {
 	// If fully qualified just leave it.
 	if(!empty($url) && (strpos($url, '://') || $url[0] == '/')) {
 		return $url;
@@ -38,23 +39,13 @@ class CRequest {
 		$url = $this->controller;
 	}
 
+	// Get current method if empty and arguments choosen
+    if(empty($method) && !empty($arguments)) {
+      $method = $this->method;
+    }
+
 	// Create url according to configured style
 	$prepend = $this->base_url;
-	if($this->cleanUrl) {
-		;
-	} elseif ($this->querystringUrl) {
-	$prepend .= 'index.php?q=';
-	} else {
-	$prepend .= 'index.php/';
-	}
-	return $prepend . rtrim("$url/$method", '/');
-	}
-  /**
-   * Create a url in the way it should be created.
-   *
-   
-  public function CreateUrl($url=null) {
-    $prepend = $this->base_url;
     if($this->cleanUrl) {
       ;
     } elseif ($this->querystringUrl) {
@@ -62,11 +53,11 @@ class CRequest {
     } else {
       $prepend .= 'index.php/';
     }
-    return $prepend . rtrim($url, '/');
-  }
-   */
-
-
+    $url = trim($url, '/');
+    $method = empty($method) ? null : '/' . trim($method, '/');
+    $arguments = empty($arguments) ? null : '/' . trim($arguments, '/');    
+    return $prepend . rtrim("$url$method$arguments", '/');
+	}
   /**
    * Parse the current url request and divide it in controller, method and arguments.
    *

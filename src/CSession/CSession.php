@@ -2,7 +2,7 @@
 /**
  * Wrapper for session, read and store values on session. Maintains flash values for one pageload.
  *
- * @package LydiaCore
+ * @package QcmfCore
  */
 class CSession {
 
@@ -36,6 +36,10 @@ class CSession {
 	public function __get($key) {
     return isset($this->data[$key]) ? $this->data[$key] : null;
   }
+
+	public function SetAuthenticatedUser($profile) { $this->data['authenticated_user'] = $profile; }
+	public function UnsetAuthenticatedUser() { unset($this->data['authenticated_user']); }
+	public function GetAuthenticatedUser() { return $this->authenticated_user; }
 
 
   /**

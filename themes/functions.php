@@ -39,8 +39,8 @@ function base_url($url=null) {
 /**
  * Create internal resource url
  */
-function create_url($url=null) {
-	return CQcmf::instance()->request->CreateUrl($url);
+function create_url($urlOrController=null, $method=null, $arguments=null) {
+  return CQcmf::Instance()->request->CreateUrl($urlOrController, $method, $arguments);
 }
 
 /**
