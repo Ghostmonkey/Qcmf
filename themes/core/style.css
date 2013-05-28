@@ -21,3 +21,6 @@ body{
 	border: 1px solid #A0F06C;
 }
 
+#login-menu{
+	float: right;
+}

@@ -72,6 +72,7 @@ $qcmf->config['controllers'] = array(
   'test' => array('enabled' => true,'class' => 'CCTest'),
   'guestbook' => array('enabled' => true,'class' => 'CCGuestbook'),
   'user' => array('enabled' => true,'class' => 'CCUser'),
+  'acp' => array('enabled' => true, 'class' => 'CCAdminControlPanel'),
 );
 
 /**

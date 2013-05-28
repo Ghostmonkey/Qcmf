@@ -1,8 +1,5 @@
 <h1>User Profile</h1>
-<ul>
-  <li><a href='<?=create_url(null, 'init')?>'>Init database, create tables and create default admin user</a>
-</ul>
-<p>This is what is known about the current user.</p>
+<p>Here you should be able to view and edit your profile information.</p>
 
 <?php if($is_authenticated): ?>
   <p>User is authenticated.</p>
