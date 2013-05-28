@@ -16,14 +16,17 @@ class CObject {
 	/**
 	 * Constructor
 	 */
-	protected function __construct() {
-		$qcmf = CQcmf::Instance();
+	protected function __construct($qcmf=null) {
+		if(!$qcmf){
+			$qcmf = CQcmf::Instance();	
+		}
 		$this -> config = &$qcmf -> config;
 		$this -> request = &$qcmf -> request;
 		$this -> data = &$qcmf -> data;
 		$this -> db = &$qcmf -> db;
 		$this -> views = &$qcmf -> views;
 		$this -> session = &$qcmf -> session;
+		$this->user = &$qcmf->user;
 	}
 
 	/**

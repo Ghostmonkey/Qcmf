@@ -36,7 +36,11 @@ class CQcmf implements ISingleton {
 		//Create container for views and theme data
 		$this->views = new CViewContainer();
 		
+		// Create a object for the user
+    	$this->user = new CMUser($this);
+				
 	}
+	
 	/**
 	 * Singleton pattern. Get the instance of the latest created object or create a new one.
 	 * @return CCQcmf The instance of this class.
