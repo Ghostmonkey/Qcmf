@@ -1,6 +1,7 @@
 <h1>Login</h1>
 <p>This page should contain the login form. For now these links are presented for testing purpouses.</p>
 <ul>
+	<?=$login_form?>
   <li><a href='<?=create_url('user/login/doe/doe')?>'>Login as doe:doe (should work)</a>
   <li><a href='<?=create_url('user/login/root/root')?>'>Login as root:root (should work)</a>
   <li><a href='<?=create_url('user/login/root@dbwebb.se/root')?>'>Login as root@dbwebb.se:root (should work)</a>

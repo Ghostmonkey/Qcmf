@@ -29,34 +29,35 @@ class CCUser extends CObject implements IController {
     ));
   }
   
-  /**
-   * View and edit user profile.
+   /**
+   * Authenticate and login a user.
    */
-  public function Profile() {
-    $this->views->SetTitle('User Profile');
-    $this->views->AddInclude(__DIR__ . '/profile.tpl.php', array(
-      'is_authenticated'=>$this->user->IsAuthenticated(), 
-      'user'=>$this->user->GetProfile(),
-    ));
+  public function Login() {
+    $form = new CFormUserLogin($this);
+    $form->CheckIfSubmitted();
+	
+	var_dump($this->views);
+	 
+	
+    $this->views->SetTitle('Login');
+	$this->views->AddInclude(__DIR__ . '/login.tpl.php', array('login_form'=>$form->GetHTML()));
+	 /*
+                ->AddInclude(__DIR__ . '/login.tpl.php', array('login_form'=>$form->GetHTML()));
+	 */     
   }
 
   /**
-   * Authenticate and login a user.
-   
-  public function Login($akronymOrEmail=null, $password=null) {
-    $this->userModel->Login($akronymOrEmail, $password);
-    $this->RedirectToController();
-  }
-  */
-  public function Login($akronymOrEmail=null, $password=null) {
-    if($akronymOrEmail && $password) {
-      $this->user->Login($akronymOrEmail, $password);
+   * Perform a login of the user as callback on a submitted form.
+   */
+  public function DoLogin($form) {
+    if($this->user->Login($form['acronym']['value'], $form['password']['value'])) {
+      $this->session->AddMessage('success', "Welcome {$this->user['name']}.");
       $this->RedirectToController('profile');
+    } else {
+      $this->session->AddMessage('notice', "Failed to login, user does not exist or password does not match.");
+      $this->RedirectToController('login');      
     }
-    $this->views->SetTitle('Login');
-    $this->views->AddInclude(__DIR__ . '/login.tpl.php');
   }
-  
 
   /**
    * Logout a user.
@@ -66,6 +67,44 @@ class CCUser extends CObject implements IController {
     $this->RedirectToController();
   }
   
+  /**
+   * View and edit user profile.
+   */
+  public function Profile() {    
+    $form = new CFormUserProfile($this, $this->user);
+    $form->CheckIfSubmitted();
+
+    $this->views->SetTitle('User Profile');
+    $this->views->AddInclude(__DIR__ . '/profile.tpl.php', array(
+                  'is_authenticated'=>$this->user['isAuthenticated'], 
+                  'user'=>$this->user,
+                  'profile_form'=>$form->GetHTML(),
+                ));
+  }
+
+  /**
+   * Change the password.
+   */
+  public function DoChangePassword($form) {
+    if($form['password']['value'] != $form['password1']['value'] || empty($form['password']['value']) || empty($form['password1']['value'])) {
+      $this->AddMessage('error', 'Password does not match or is empty.');
+    } else {
+      $ret = $this->user->ChangePassword($form['password']['value']);
+      $this->session->AddMessage($ret, 'Saved new password.', 'Failed updating password.');
+    }
+    $this->RedirectToController('profile');
+  }
+
+  /**
+   * Save updates to profile information.
+   */
+  public function DoProfileSave($form) {
+    $this->user['name'] = $form['name']['value'];
+    $this->user['email'] = $form['email']['value'];
+    $ret = $this->user->Save();
+    $this->session->AddMessage($ret, 'Saved profile.', 'Failed saving profile.');
+    $this->RedirectToController('profile');
+  }
 
   /**
    * Init the user database.
