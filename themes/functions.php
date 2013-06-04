@@ -71,13 +71,17 @@ function get_messages_from_session() {
   return $html;
 }
 
+function get_gravatar($size=null) {
+  return 'http://www.gravatar.com/avatar/' . md5(strtolower(trim(CQcmf::Instance()->user['email']))) . '.jpg?r=pg&amp;d=wavatar&amp;' . ($size ? "s=$size" : null);
+}
+
 /**
 * Login menu. Creates a menu which reflects if user is logged in or not.
 */
 function login_menu() {
   $qcmf = CQcmf::Instance();
   if($qcmf->user->IsAuthenticated()) {
-    $items = "<a href='" . create_url('user/profile') . "'>" . $qcmf->user->GetAcronym() . "</a> ";
+     $items = "<a href='" . create_url('user/profile') . "'><img class='gravatar' src='" . get_gravatar(20) . "' alt=''> " . $qcmf->user['acronym'] . "</a> ";
     if($qcmf->user->IsAdministrator()) {
       $items .= "<a href='" . create_url('acp') . "'>acp</a> ";
     }

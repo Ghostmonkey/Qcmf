@@ -16,9 +16,9 @@ class CObject {
 	/**
 	 * Constructor
 	 */
-	protected function __construct($qcmf=null) {
-		if(!$qcmf){
-			$qcmf = CQcmf::Instance();	
+	protected function __construct($qcmf = null) {
+		if (!$qcmf) {
+			$qcmf = CQcmf::Instance();
 		}
 		$this -> config = &$qcmf -> config;
 		$this -> request = &$qcmf -> request;
@@ -26,25 +26,25 @@ class CObject {
 		$this -> db = &$qcmf -> db;
 		$this -> views = &$qcmf -> views;
 		$this -> session = &$qcmf -> session;
-		$this->user = &$qcmf->user;
+		$this -> user = &$qcmf -> user;
 	}
 
 	/**
 	 * Redirect to another url and store the session
 	 */
-	protected function RedirectTo($url) {
+	protected function RedirectTo($urlOrController = null, $method = null) {
 		$qcmf = CQcmf::Instance();
-		if (isset($qcmf -> config['debug']['db-num-queries']) && $qcmf -> config['debug']['db-num-queries'] && isset($qcmf -> db)) {
+		if (isset($this -> config['debug']['db-num-queries']) && $this -> config['debug']['db-num-queries'] && isset($this -> db)) {
 			$this -> session -> SetFlash('database_numQueries', $this -> db -> GetNumQueries());
 		}
-		if (isset($qcmf -> config['debug']['db-queries']) && $qcmf -> config['debug']['db-queries'] && isset($qcmf -> db)) {
+		if (isset($this -> config['debug']['db-queries']) && $this -> config['debug']['db-queries'] && isset($this -> db)) {
 			$this -> session -> SetFlash('database_queries', $this -> db -> GetQueries());
 		}
-		if (isset($qcmf -> config['debug']['timer']) && $qcmf -> config['debug']['timer']) {
-			$this -> session -> SetFlash('timer', $qcmf -> timer);
+		if (isset($this -> config['debug']['timer']) && $this -> config['debug']['timer']) {
+			$this -> session -> SetFlash('timer', $ly -> timer);
 		}
 		$this -> session -> StoreInSession();
-		header('Location: ' . $this -> request -> CreateUrl($url));
+		header('Location: ' . $this -> request -> CreateUrl($urlOrController, $method));
 	}
 
 	/**

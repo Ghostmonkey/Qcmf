@@ -28,22 +28,22 @@ class CCUser extends CObject implements IController {
       'user'=>$this->userModel->GetProfile(),
     ));
   }
-  
-   /**
+    /**
    * Authenticate and login a user.
    */
   public function Login() {
     $form = new CFormUserLogin($this);
-    $form->CheckIfSubmitted();
-	
-	var_dump($this->views);
-	 
-	
+	if($form->Check() === false) {
+      $this->session->AddMessage('notice', 'Some fields did not validate and the form could not be processed.');
+      $this->RedirectToController('login');
+    }
     $this->views->SetTitle('Login');
-	$this->views->AddInclude(__DIR__ . '/login.tpl.php', array('login_form'=>$form->GetHTML()));
-	 /*
-                ->AddInclude(__DIR__ . '/login.tpl.php', array('login_form'=>$form->GetHTML()));
-	 */     
+	$this->views->AddInclude(__DIR__ . '/login.tpl.php', array(
+                  'login_form' => $form,
+                  'allow_create_user' => CQcmf::Instance()->config['create_new_users'],
+                  'create_user_url' => $this->request->CreateUrl(null, 'create'),
+                ));
+	    
   }
 
   /**
@@ -72,8 +72,7 @@ class CCUser extends CObject implements IController {
    */
   public function Profile() {    
     $form = new CFormUserProfile($this, $this->user);
-    $form->CheckIfSubmitted();
-
+    $form->Check();
     $this->views->SetTitle('User Profile');
     $this->views->AddInclude(__DIR__ . '/profile.tpl.php', array(
                   'is_authenticated'=>$this->user['isAuthenticated'], 
@@ -87,7 +86,7 @@ class CCUser extends CObject implements IController {
    */
   public function DoChangePassword($form) {
     if($form['password']['value'] != $form['password1']['value'] || empty($form['password']['value']) || empty($form['password1']['value'])) {
-      $this->AddMessage('error', 'Password does not match or is empty.');
+      $this->session->AddMessage('error', 'Password does not match or is empty.');
     } else {
       $ret = $this->user->ChangePassword($form['password']['value']);
       $this->session->AddMessage($ret, 'Saved new password.', 'Failed updating password.');
@@ -114,5 +113,40 @@ class CCUser extends CObject implements IController {
     $this->RedirectToController();
   }
   
+    /**
+   * Create a new user.
+   */
+  public function Create() {
+    $form = new CFormUserCreate($this);
+    if($form->Check() === false) {
+      $this->AddMessage('notice', 'You must fill in all values.');
+      $this->RedirectToController('Create');
+    }
+    $this->views->SetTitle('Create user');
+    $this->views->AddInclude(__DIR__ . '/create.tpl.php', array('form' => $form->GetHTML()));     
+  }
+
+	    /**
+   * Perform a creation of a user as callback on a submitted form.
+   *
+   * @param $form CForm the form that was submitted
+   */
+  public function DoCreate($form) {    
+    if($form['password']['value'] != $form['password1']['value'] || empty($form['password']['value']) || empty($form['password1']['value'])) {
+      $this->AddMessage('error', 'Password does not match or is empty.');
+      $this->RedirectToController('create');
+    } else if($this->user->Create($form['acronym']['value'], 
+                           $form['password']['value'],
+                           $form['name']['value'],
+                           $form['email']['value']
+                           )) {
+      $this->session->AddMessage('success', "Welcome {$this->user['name']}. Your have successfully created a new account.");
+      $this->user->Login($form['acronym']['value'], $form['password']['value']);
+      $this->RedirectToController('profile');
+    } else {
+      $this->session->AddMessage('notice', "Failed to create an account.");
+      $this->RedirectToController('create');
+    }
+  }
 
 }

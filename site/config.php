@@ -83,4 +83,12 @@ $qcmf->config['theme'] = array(
   'name'    => 'core', 
 );
 
+/**
+* How to hash password of new users, choose from: plain, md5salt, md5, sha1salt, sha1.
+*/
+$qcmf->config['hashing_algorithm'] = 'sha1salt';
 
+/**
+* Allow or disallow creation of new user accounts.
+*/
+$qcmf->config['create_new_users'] = true;
